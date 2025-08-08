@@ -5,3 +5,5 @@
 /.vs/Calender
 /Api/bin/Debug/net8.0
 /Api/obj
+/.vs
+/Api/Api.csproj.user
