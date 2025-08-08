@@ -2,7 +2,7 @@ using Api.Data;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers;
+namespace CalendarApi.Controllers.V1;
 
 [ApiController]
 [Route("api/[controller]")]
