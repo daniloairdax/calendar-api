@@ -1,10 +1,29 @@
 ﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+# .gitignore for Visual Studio & .NET projects
 ################################################################################
 
-/.vs/Calender
-/Api/bin/Debug/net8.0
-/Api/obj
-/.vs
-/Api/Api.csproj.user
-/CalendarApi/obj/Debug/net8.0
+# User-specific files
+*.user
+
+# Visual Studio folders
+.vs/
+.vscode/
+
+# Build output
+**/bin/
+**/obj/
+
+# NuGet packages
+**/packages/
+
+# Project-specific files
+Api/Api.csproj.user
+
+# Ignore all test results
+TestResults/
+
+# Ignore all logs
+*.log
+
+# Ignore all generated files
+*.generated.*

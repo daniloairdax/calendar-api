@@ -1,0 +1,61 @@
+<Api_HostAddress = http://localhost:5160
+
+### Health Check
+GET {{Api_HostAddress}}/api/health
+Accept: application/json
+
+### Get All Animals (v2)
+GET {{Api_HostAddress}}/api/v2/animal
+Accept: application/json
+
+### Create Animal (v2)
+POST {{Api_HostAddress}}/api/v2/animal
+Content-Type: application/json
+
+{
+  "name": "Dog",
+  "birthDate": "2019-01-01T00:00:00Z",
+  "ownerId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "ownerName": "Dog Owner",
+  "ownerEmail": "dogowner@example.com"
+}
+
+### Get Animal by Id (v2)
+GET {{Api_HostAddress}}/api/v2/animal/f47ac10b-58cc-4372-a567-0e02b2c3d479
+Accept: application/json
+
+### Delete Animal (v2)
+DELETE {{Api_HostAddress}}/api/v2/animal/f47ac10b-58cc-4372-a567-0e02b2c3d479
+
+### Get Appointment by Id (v2)
+GET {{Api_HostAddress}}/api/v2/appointment/f47ac10b-58cc-4372-a567-0e02b2c3d479
+Accept: application/json
+
+### Create Appointment (v2)
+POST {{Api_HostAddress}}/api/v2/appointment
+Content-Type: application/json
+
+{
+  "startTime": "2024-08-10T09:00:00Z",
+  "endTime": "2024-08-10T10:00:00Z",
+  "animalId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "customerId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "veterinarianId": "f47ac10b-58cc-4372-a567-0e02b2c3d481",
+  "status": "Scheduled",
+  "notes": "Vet appointment"
+}
+
+### List Vet Appointments (v2)
+GET {{Api_HostAddress}}/api/v2/appointment/vet/f47ac10b-58cc-4372-a567-0e02b2c3d481?startDate=2024-08-01&endDate=2024-08-31
+Accept: application/json
+
+### Update Appointment Status (v2)
+PUT {{Api_HostAddress}}/api/v2/appointment/status
+Content-Type: application/json
+
+{
+  "appointmentId": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "status": "Completed"
+}
+
+# Response
