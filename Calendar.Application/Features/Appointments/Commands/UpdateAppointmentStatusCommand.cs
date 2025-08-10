@@ -1,14 +1,14 @@
 using Calendar.Application.Constants;
+using Calendar.Application.Exceptions;
+using Calendar.Application.Interfaces;
 using Calendar.Domain.Enums;
-using Calendar.Infrastructure.Persistence;
-using Calendar.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ValidationException = Calendar.Application.Exceptions.ValidationException;
 
 namespace Calendar.Application.Features.Appointments.Commands
 {
@@ -33,20 +33,19 @@ namespace Calendar.Application.Features.Appointments.Commands
 
     public class UpdateAppointmentStatusCommandHandler : IRequestHandler<UpdateAppointmentStatusCommand, bool>
     {
-        private readonly CalendarDbContext _dbContext;
+        private readonly IAppointmentRepository _appointmentRepository;
         private readonly IEmailService _emailService;
 
-        public UpdateAppointmentStatusCommandHandler(CalendarDbContext dbContext, IEmailService emailService)
+        public UpdateAppointmentStatusCommandHandler(IAppointmentRepository appointmentRepository, IEmailService emailService)
         {
-            _dbContext = dbContext;
+            _appointmentRepository = appointmentRepository;
             _emailService = emailService;
         }
 
         public async Task<bool> Handle(UpdateAppointmentStatusCommand request, CancellationToken cancellationToken)
         {
-            var appointment = await _dbContext.Appointments
-                .Include(a => a.Animal)
-                .FirstOrDefaultAsync(a => a.Id == request.AppointmentId, cancellationToken);
+            var appointment = await _appointmentRepository.GetByIdAsync(request.AppointmentId, cancellationToken);
+
             if (appointment == null)
             {
                 throw new NotFoundException("Appointment", request.AppointmentId);
@@ -59,7 +58,7 @@ namespace Calendar.Application.Features.Appointments.Commands
             }
 
             appointment.Status = request.Status;
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _appointmentRepository.UpdateAsync(appointment, cancellationToken);
 
             // Send email notification on cancel
             if (request.Status == AppointmentStatus.Canceled)

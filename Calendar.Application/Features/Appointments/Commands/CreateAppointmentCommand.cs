@@ -1,12 +1,11 @@
 using AutoMapper;
 using Calendar.Application.Features.Animals.Queries;
 using Calendar.Application.Features.Appointments.Models;
+using Calendar.Application.Interfaces;
 using Calendar.Domain.Enums;
 using Calendar.Domain.Models;
-using Calendar.Infrastructure.Persistence;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,12 +54,12 @@ namespace Calendar.Application.Features.Appointments.Commands
     public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointmentCommand, AppointmentDto>
     {
         private readonly IMapper _mapper;
-        private readonly CalendarDbContext _dbContext;
+        private readonly IAppointmentRepository _appointmentRepository;
         private readonly IMediator _mediator;
 
-        public CreateAppointmentCommandHandler(CalendarDbContext dbContext, IMediator mediator, IMapper mapper)
+        public CreateAppointmentCommandHandler(IAppointmentRepository appointmentRepository, IMediator mediator, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _appointmentRepository = appointmentRepository;
             _mediator = mediator;
             _mapper = mapper;
         }
@@ -70,16 +69,6 @@ namespace Calendar.Application.Features.Appointments.Commands
             // Check if AnimalId exists
             var animalQuery = new GetAnimalByIdQuery(request.AnimalId);
             await _mediator.Send(animalQuery, cancellationToken);
-
-            // Check for duplicate appointments
-            var hasOverlap = await _dbContext.Appointments
-                .AnyAsync(a => a.AnimalId == request.AnimalId &&
-                               a.StartTime <= request.EndTime &&
-                               a.EndTime >= request.StartTime, cancellationToken);
-            if (hasOverlap)
-            {
-                throw new ValidationException("An appointment for this animal already exists during the specified time.");
-            }
 
             var appointment = new Appointment
             {
@@ -93,8 +82,7 @@ namespace Calendar.Application.Features.Appointments.Commands
                 Notes = request.Notes
             };
 
-            _dbContext.Appointments.Add(appointment);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _appointmentRepository.AddAsync(appointment, cancellationToken);
 
             return _mapper.Map<AppointmentDto>(appointment);
         }

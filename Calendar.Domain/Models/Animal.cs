@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Calendar.Domain.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Animal : BaseModel
     {
         [Key]

@@ -1,5 +1,6 @@
 using Calendar.Domain.Models;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Calendar.Infrastructure.Persistence
@@ -7,6 +8,7 @@ namespace Calendar.Infrastructure.Persistence
     /// <summary>
     /// Seeds the database with initial data for testing purposes.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class DbSeeder
     {
         public static void Seed(CalendarDbContext context)

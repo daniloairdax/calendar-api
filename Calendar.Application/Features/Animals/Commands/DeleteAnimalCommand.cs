@@ -1,6 +1,5 @@
-﻿using Calendar.Application.Features.Animals.Queries;
-using Calendar.Domain.Models;
-using Calendar.Infrastructure.Persistence;
+﻿using Calendar.Application.Exceptions;
+using Calendar.Application.Interfaces;
 using FluentValidation;
 using MediatR;
 using System;
@@ -30,27 +29,23 @@ namespace Calendar.Application.Features.Animals.Commands
 
     public class DeleteAnimalCommandHandler : IRequestHandler<DeleteAnimalCommand, bool>
     {
-        private readonly CalendarDbContext _dbContext;
-        private readonly IMediator _mediator;
+        private readonly IAnimalRepository _animalRepository;
 
-        public DeleteAnimalCommandHandler(CalendarDbContext dbContext, IMediator mediator)
+        public DeleteAnimalCommandHandler(IAnimalRepository animalRepository)
         {
-            _dbContext = dbContext;
-            _mediator = mediator;
+            _animalRepository = animalRepository;
         }
 
         public async Task<bool> Handle(DeleteAnimalCommand request, CancellationToken cancellationToken)
         {
-            // Check if AnimalId exists
-            var animal = await _dbContext.Animals.FindAsync(new object[] { request.Id }, cancellationToken);
+            var animal = await _animalRepository.GetByIdAsync(request.Id, cancellationToken);
+
             if (animal == null)
             {
                 throw new NotFoundException("Animal", request.Id);
             }
 
-            _dbContext.Animals.Remove(animal);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
+            await _animalRepository.DeleteAsync(request.Id, cancellationToken);
             return true;
         }
     }

@@ -2,9 +2,11 @@ using Calendar.Domain.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Calendar.Domain.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Appointment : BaseModel
     {
         [Key]

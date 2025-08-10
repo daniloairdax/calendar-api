@@ -1,4 +1,4 @@
-﻿using Calendar.Application;
+﻿using Calendar.Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

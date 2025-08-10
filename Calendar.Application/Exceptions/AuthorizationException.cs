@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Calendar.Application
+namespace Calendar.Application.Exceptions
 {
     [ExcludeFromCodeCoverage]
     public class AuthorizationException : Exception

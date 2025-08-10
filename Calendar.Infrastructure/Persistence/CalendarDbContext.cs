@@ -1,13 +1,15 @@
+using Calendar.Application.Interfaces;
 using Calendar.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Calendar.Infrastructure.Persistence
 {
-    public class CalendarDbContext : DbContext
+    [ExcludeFromCodeCoverage]
+    public class CalendarDbContext : DbContext, ICalendarDbContext
     {
         public CalendarDbContext(DbContextOptions<CalendarDbContext> options)
             : base(options) { }

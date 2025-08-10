@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using Calendar.Application.Exceptions;
 using Calendar.Application.Features.Animals.Models;
-using Calendar.Infrastructure.Persistence;
+using Calendar.Application.Interfaces;
 using FluentValidation;
 using MediatR;
 using System;
@@ -30,18 +31,19 @@ namespace Calendar.Application.Features.Animals.Queries
 
     public class Handler : IRequestHandler<GetAnimalByIdQuery, AnimalDto?>
     {
-        private readonly CalendarDbContext _dbContext;
+        private readonly IAnimalRepository _animalRepository;
         private readonly IMapper _mapper;
 
-        public Handler(CalendarDbContext dbContext, IMapper mapper)
+        public Handler(IAnimalRepository animalRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _animalRepository = animalRepository;
             _mapper = mapper;
         }
 
         public async Task<AnimalDto?> Handle(GetAnimalByIdQuery request, CancellationToken cancellationToken)
         {
-            var animal = await _dbContext.Animals.FindAsync(new object[] { request.Id }, cancellationToken);
+            var animal = await _animalRepository.GetByIdAsync(request.Id, cancellationToken);
+
             if (animal == null)
             {
                 throw new NotFoundException("Animal", request.Id);

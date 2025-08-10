@@ -1,9 +1,9 @@
-﻿using Calendar.Application.Features.Animals.Models;
+﻿using AutoMapper;
+using Calendar.Application.Features.Animals.Models;
+using Calendar.Application.Interfaces;
 using Calendar.Domain.Models;
-using Calendar.Infrastructure.Persistence;
 using FluentValidation;
 using MediatR;
-using AutoMapper;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,12 +45,12 @@ namespace Calendar.Application.Features.Animals.Commands
 
     public class CreateAnimalCommandHandler : IRequestHandler<CreateAnimalCommand, AnimalDto>
     {
-        private readonly CalendarDbContext _dbContext;
+        private readonly IAnimalRepository _animalRepository;
         private readonly IMapper _mapper;
 
-        public CreateAnimalCommandHandler(CalendarDbContext dbContext, IMapper mapper)
+        public CreateAnimalCommandHandler(IAnimalRepository animalRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _animalRepository = animalRepository;
             _mapper = mapper;
         }
 
@@ -65,8 +65,7 @@ namespace Calendar.Application.Features.Animals.Commands
                 OwnerEmail = request.OwnerEmail
             };
 
-            _dbContext.Animals.Add(animal);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _animalRepository.AddAsync(animal, cancellationToken);
 
             return _mapper.Map<AnimalDto>(animal);
         }

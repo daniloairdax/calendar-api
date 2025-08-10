@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
+using Calendar.Application.Exceptions;
 using Calendar.Application.Features.Appointments.Models;
-using Calendar.Infrastructure.Persistence;
+using Calendar.Application.Interfaces;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,21 +31,18 @@ namespace Calendar.Application.Features.Appointments.Queries
 
     public class GetAppointmentByIdQueryHandler : IRequestHandler<GetAppointmentByIdQuery, AppointmentDto?>
     {
-        private readonly CalendarDbContext _dbContext;
+        private readonly IAppointmentRepository _appointmentRepository;
         private readonly IMapper _mapper;
 
-        public GetAppointmentByIdQueryHandler(CalendarDbContext dbContext, IMapper mapper)
+        public GetAppointmentByIdQueryHandler(IAppointmentRepository appointmentRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _appointmentRepository = appointmentRepository;
             _mapper = mapper;
         }
 
         public async Task<AppointmentDto?> Handle(GetAppointmentByIdQuery request, CancellationToken cancellationToken)
         {
-            var appointment = await _dbContext.Appointments
-                .Include(a => a.Animal)
-                .Where(a => a.Id == request.Id)
-                .FirstOrDefaultAsync(cancellationToken);
+            var appointment = await _appointmentRepository.GetByIdAsync(request.Id, cancellationToken);
 
             if (appointment == null)
             {

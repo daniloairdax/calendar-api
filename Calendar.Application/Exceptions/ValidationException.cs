@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Calendar.Application
+namespace Calendar.Application.Exceptions
 {
     [ExcludeFromCodeCoverage]
     public class ValidationException : Exception

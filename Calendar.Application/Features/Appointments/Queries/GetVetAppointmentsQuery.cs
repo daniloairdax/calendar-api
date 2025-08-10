@@ -1,14 +1,14 @@
+using AutoMapper;
+using Calendar.Application.Exceptions;
 using Calendar.Application.Features.Appointments.Models;
-using Calendar.Infrastructure.Persistence;
+using Calendar.Application.Interfaces;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 
 namespace Calendar.Application.Features.Appointments.Queries
 {
@@ -37,32 +37,26 @@ namespace Calendar.Application.Features.Appointments.Queries
 
     public class GetVetAppointmentsQueryHandler : IRequestHandler<GetVetAppointmentsQuery, IEnumerable<VetAppointmentDto>>
     {
-        private readonly CalendarDbContext _dbContext;
+        private readonly IAppointmentRepository _appointmentRepository;
         private readonly IMapper _mapper;
 
-        public GetVetAppointmentsQueryHandler(CalendarDbContext dbContext, IMapper mapper)
+        public GetVetAppointmentsQueryHandler(IAppointmentRepository appointmentRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _appointmentRepository = appointmentRepository;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<VetAppointmentDto>> Handle(GetVetAppointmentsQuery request, CancellationToken cancellationToken)
         {
-            var appointments = await _dbContext.Appointments
-                .Include(a => a.Animal)
-                .Where(a => a.VeterinarianId == request.VetId &&
-                            a.StartTime >= request.StartDate &&
-                            a.EndTime <= request.EndDate)
-                .ToListAsync(cancellationToken);
+            var appointments = await _appointmentRepository.GetByVetAndDateRangeAsync(
+                request.VetId, request.StartDate, request.EndDate, cancellationToken);
 
-            if (appointments == null || appointments.Count == 0)
+            if (appointments == null || !appointments.Any())
             {
                 throw new NotFoundException("Appointments for veterinarian not found", request.VetId);
             }
 
-            var vetAppointmentsResult = _mapper.Map<IEnumerable<VetAppointmentDto>>(appointments);
-
-            return vetAppointmentsResult;
+            return _mapper.Map<IEnumerable<VetAppointmentDto>>(appointments);
         }
     }
 }
