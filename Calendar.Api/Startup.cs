@@ -1,8 +1,8 @@
 ﻿using Calendar.Api.Controllers.Filters;
 using Calendar.Api.Controllers.Swagger;
 using Calendar.Api.HealthCheck;
-using Calendar.Application.Features.Appointments.Queries;
 using Calendar.Application.Interfaces;
+using Calendar.Application.Mappings;
 using Calendar.Infrastructure.Middlewares;
 using Calendar.Infrastructure.Persistence;
 using Calendar.Infrastructure.Services;
@@ -83,13 +83,14 @@ namespace Calendar.Api
                 options.UseSqlite(Configuration.GetConnectionString("SqlConnection")));
 
             // Third-party libraries
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAppointmentByIdQuery).Assembly));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationMapperProfile).Assembly));
+            services.AddAutoMapper(typeof(ApplicationMapperProfile).Assembly);
 
             // Register dependency injection services
             services.AddSingleton<IEmailService, EmailService>();
             services.AddScoped<IAnimalRepository, AnimalRepository>();
             services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-            services.AddScoped<ICalendarDbContext>(provider => provider.GetRequiredService<CalendarDbContext>());
+            services.AddScoped<ICalendarDbContext>(provider => provider.GetRequiredService<CalendarDbContext>());         
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env)
