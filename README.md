@@ -3,11 +3,21 @@
 This solution is an appointment system for a veterinary clinic, built with ASP.NET Core (.NET 8) and Entity Framework Core using a code-first approach with SQLite as the local database.
 
 ## Projects
-- **Calendar.Api**: ASP.NET Core Web API project
-- **Calendar.Application**: Application layer (CQRS, MediatR, business logic)
-- **Calendar.Domain**: Domain models and enums
-- **Calendar.Infrastructure**: Data access, EF Core DbContext, migrations, and seeding
-- **Calendar.Tests / Calendar.IntegrationTests**: Unit and integration tests
+- **Calendar.Api**: ASP.NET Core Web API for managing appointments, animals, and health checks.
+- **Calendar.Application**: Application layer containing business logic, CQRS handlers, and interfaces.
+- **Calendar.Infrastructure**: Data access, persistence, and service implementations (e.g., email, repositories).
+- **Calendar.Domain**: Domain models and enums (excluded from code coverage).
+- **Calendar.Tests**: Unit tests for application logic (excluded from code coverage).
+
+## Technologies
+- .NET 8
+- ASP.NET Core
+- Entity Framework Core (SQLite)
+- MediatR (CQRS)
+- AutoMapper
+- FluentValidation
+- xUnit, NSubstitute (testing)
+- Swagger/OpenAPI
 
 ## Database
 - **SQLite** is used as the local database.
@@ -52,6 +62,9 @@ This solution is an appointment system for a veterinary clinic, built with ASP.N
 - Add authentication/authorization for secure endpoints
 - Use repository pattern for more complex data access
 - Add more tests and API documentation
+
+## API Documentation
+- Swagger UI is available at `/swagger` when running the API.
 
 ---
 
