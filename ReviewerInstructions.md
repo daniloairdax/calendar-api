@@ -1,64 +1,77 @@
+# Reviewer Instructions
+
 Dear reviewer, here are some instructions to help you with the review process:
 
-API is deployed to https://github.com/daniloairdax/calendar-api
-On main branch you can find init API code that you provided.
-I did all my changes via one feature branch and one PR.
-Branch: https://github.com/daniloairdax/calendar-api/tree/feature/danilo/refactor
-PR link: https://github.com/daniloairdax/calendar-api/pull/1
-In PR summary you may find short description of changes I made as well.
+- API is deployed to [GitHub](https://github.com/daniloairdax/calendar-api)
+- Main branch contains the initial API code.
+- All changes are made via one feature branch and one PR:
+  - Branch: https://github.com/daniloairdax/calendar-api/tree/feature/danilo/refactor
+  - PR: https://github.com/daniloairdax/calendar-api/pull/1
+  - PR summary contains a short description of changes.
+- Main branch is protected:
+  - No direct commits allowed.
+  - All changes require PR and review.
+- OWNERS file is added to the root.
+- README.md provides a summary and database migration instructions ([link](https://github.com/daniloairdax/calendar-api/pull/1/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5)).
+- Startup class registers and configures all necessary services, called by Program.cs.
+- Projects are divided by layers with clear responsibilities.
+- MediatR is used for CQRS; FluentValidation for input validation.
+- Exception handling via global filter `ApiExceptionFilterAttribute` for standardized error responses.
+- `Api.http` contains all endpoints for API testing.
+- SwaggerUI is used for API documentation and testing.
+- Authorization via API key (hardcoded in `ApiKeyMiddleware`). In real life, use a secure store (e.g., Azure Key Vault).
+- JWT is recommended for real authentication/authorization.
+- To authenticate, pass API key in request header. For SwaggerUI, use key `danilotest`.
+- V1 controllers/endpoints use hardcoded data for Animals/Appointments.
+- V2 controllers use EF Core and SQLite database.
+- V1 includes a HealthCheckController for API health status.
+- V1 endpoints are marked obsolete and will be removed; they prompt users to use V2.
+- V1 kept for backward compatibility; all fixes/bugs from V1 are applied to V2.
+- All important classes/methods have XML documentation.
+- Endpoints have full Swagger documentation (requests, responses, errors, status codes).
+- V2 AppointmentsController adds new features: `GetVetAppointments`, `UpdateStatus`.
+- Launch settings use Development environment by default.
+- Multiple appsettings files for different environments (Development, Staging, Production).
+- Each environment uses `calendar.db` in API project root.
+- Startup class includes security features: CORS, API key authentication, SwaggerUI, Cookie policy, HSTS, HTTPS redirection, etc.
+- V2 controllers use commands/queries from Calendar.Application for thin controllers.
+- Application layer uses MediatR for CQRS and AutoMapper for model/DTO mapping.
+- Queries/commands use FluentValidation for input validation.
+- Handlers communicate via MediatR.
+- FluentValidation does simple (non-DB) validations; DB access via EF Core in queries/commands over IRepository interfaces.
+- Database access via Calendar.Infrastructure and Repository pattern.
+- Database is code-first with migrations, using SQLite locally.
+- On API launch, `calendar.db` is created in API root.
+- Data is seeded automatically on startup via DbSeeder.
+- Database schema/initial data generated from C# models/migrations.
+- Services, CQRS handlers, and validations are tested in Calendar.Tests.
+- Controllers are not tested (thin, only handle HTTP).
+- For real projects, add integration/E2E tests with real DB (cloud/docker pipeline).
+- Tests should cover repositories and controllers.
+- xUnit and NSubstitute are used for testing.
+- EmailService uses Debug.WriteLine instead of real email sending.
+- All NuGet packages are up-to-date and suitable for .NET 8.
+- Nightly build workflow runs at 2 AM on GitHub Actions (`.github/workflows/nightly-build.yml`).
+  - Example run: https://github.com/daniloairdax/calendar-api/actions/runs/16867921274
 
-I added some rules as protection to the main branch, to avoid direct commits to it and to ensure that all changes are made through PRs and reviewed by at least one person.
-I added also OWNERS file to the root.
-Also you may find README.md file with basic summary of the solution and how to maintain in future database migrations. 
-Readme link: https://github.com/daniloairdax/calendar-api/pull/1/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5
-
-I crated startup class with all necessary services registrations and configurations that is called by Program.cs file.
-All projects are divided by layers and have their own responsibilities.
-I used MediatR for CQRS and FluentValidation for input validation.
-I added exception handling via global filter ApiExceptionFilterAttribute. It intercepts all unhandled exceptions and returns a standardized error response.
-Api.http is updated and contains all necessary endpoints to test the API.
-Also solution uses SwaggerUI for API documentation and testing.
-I added authorization via API key which is now just hardcoded in the ApiKeyMiddleware. In real life it should be stored in a secure place like Azure Key Vault or AWS Secrets Manager.
-Also in real life I would use JWT for authentication and authorization.
-So in order to be authenticated you need to pass the API key in the request header.
-If you are testing over SwaggerUI after launching the API project Calendar.Api, you need to authorize using a key "danilotest".
-
-All controllers and endpoints that you provided are in V1 version of the API now. They are still using hardcoded data for Animals and Appointments.
-I created a new controller V2 with endpoints that use EF Core and SQLite database.
-In V1 I added a new HealthCheckController that returns the health status of the API.
-V1 endpoints are marked as opsolete and will be removed in the future. They are providing  message to force user to use V2 endpoints.
-I didnt want to break the existing functionality and wanted to keep the old endpoints for backward compatibility.
-All fixes and bugs from V1 are applied to V2.
-All important classes and methods are documented with XML comments.
-Endpoints provided full Swagger documentation with expected request and response models including errors and status codes.
-New features are added in V2 appointments controller in endpoints GetVetAppointments and UpdateStatus.
-Launch settings is using Developement environment by default.
-There are different appsettings files for different environments: Development, Staging, Production.
-For now each of them is using calendar.db file in the root of the API project.
-Startup class contains many security features like CORS, API key authentication, SwaggerUI, Cookie policy, HSTS, Https redirection, etc.
-It helps with protection from common vulnerabilities and attacks.
-V2 controllers are using now commands and queries from Calendar.Application project. This keeps controllers thin and focused on handling HTTP requests and responses.
-In application layer I used MediatR for CQRS and AutoMapper for mapping between domain models and DTOs.
-Queries and commands are validating input data using FluentValidation.
-They also can communicate between each other via MediatR.
-Fluent validation does simple validations which doesnt require database access.
-If database access is required, then it is done via EF Core in the queries and commands over IRepository interfaces.
-Database access is done via Calendar.Infrastructure project and Repository pattern.
-Database is craated using code-first approach with migrations with SQL lite as the local database.
-After launching the API project Calendar.Api, the database file calendar.db is created in the root of the API project.
-Data it self is seeded automatically on app startup via DbSeeder class.
-Database schema and initial data are generated from C# models and migrations.
-Services and CQRS handlers and fluent validations are tested in Calendar.Tests project.
-Controllers are not tested, because they are thin and focused on handling HTTP requests and responses.
-In real life I would create Integration and E2E tests with real database access when db is hosted in a cloud environment or in docker container on pipeline.
-Those tests would cover Repositories and Conntrolers as well.
-I used xUnit and NSubstitute for testing.
-EmailService use Debug.WriteLine instead of real email sending. 
-All nugets that are used are without vulnerabilities and are up to date to versions that suits .NET 8.
-
-I created also simple Nightly build workfklow that runs every night at 2 AM on github actions and its located int .github/workflows/nightly-build.yml.
-It does simple build and test of the solution.
-Example of one run:
-https://github.com/daniloairdax/calendar-api/actions/runs/16867921274
+## Issues found in initial API code
+- Typo: calender instead of calendar API
+- GetAnimal returns OK even if animal not found (null)
+- CreateAnimal endpoint does not validate properties other than Name (e.g., OwnerName, OwnerEmail)
+- CreateAppointment endpoint returns type Animal (should be Appointment)
+- CreateAppointment endpoint does not validate StartTime/EndTime
+- In AppointmentData, second Appointment missing StartTime/EndTime (not nullable)
+- In AppointmentData, reading Id/OwnerId after First() may fail if list is empty
+- Enum AppointmentStatus should be in separate file in Enums folder, not in Appointment.cs
+- VeterinarianId in Appointment.cs has no reference; must be specified in AppointmentData (not nullable)
+- WeatherForecast endpoint in Api.http does not exist; only api/animal and api/appointment
+- Program.cs lacks authorization for production; consider enabling Swagger for non-dev environments
+- Endpoints should be async
+- Typo in AppointmentStatus enum: Cancelled should be Canceled
+- In CreateAnimal, calling GetAnimal after add is not needed; should return created animal (fixed in V2)
+- Same issue in CreateAppointment
+- GetAnimal endpoint does not handle not found exception
+- Not enough input validation in creation endpoints for Animals/Appointments
+- CreateAppointment does not validate if AnimalId exists (fixed in V2)
 
 Let me know if you have any questions or need more information.
