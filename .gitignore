@@ -27,3 +27,7 @@ TestResults/
 
 # Ignore all generated files
 *.generated.*
+
+# SQLite database files
+*.db-shm
+*.db-wal
