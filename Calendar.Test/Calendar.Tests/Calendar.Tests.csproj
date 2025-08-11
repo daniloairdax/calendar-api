@@ -28,6 +28,5 @@
     <ProjectReference Include="..\..\Calendar.Api\Calendar.Api.csproj" />
     <ProjectReference Include="..\..\Calendar.Application\Calendar.Application.csproj" />
     <ProjectReference Include="..\..\Calendar.Domain\Calendar.Domain.csproj" />
-    <ProjectReference Include="..\Calendar.IntegrationTests\Calendar.IntegrationTests.csproj" />
   </ItemGroup>
 </Project>

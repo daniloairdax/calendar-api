@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36401.2 d17.14
+VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Api", "Calendar.Api\Calendar.Api.csproj", "{EA7E910D-D5FE-4EDD-ADB4-F4C567C74020}"
 EndProject
@@ -15,8 +15,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Domain", "Calendar.Domain\Calendar.Domain.csproj", "{6CEAA0A7-4F67-6600-C127-C6236E945B45}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Infrastructure", "Calendar.Infrastructure\Calendar.Infrastructure.csproj", "{C75AA58C-2FE1-4478-7834-1F02D9768EE9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.IntegrationTests", "Calendar.Test\Calendar.IntegrationTests\Calendar.IntegrationTests.csproj", "{B552DEAF-1C57-675E-4BEB-82CEF5C5B3C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar.Tests", "Calendar.Test\Calendar.Tests\Calendar.Tests.csproj", "{0E30B8CB-042E-5C1B-8B30-D9FC1B713207}"
 EndProject
@@ -42,10 +40,6 @@ Global
 		{C75AA58C-2FE1-4478-7834-1F02D9768EE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C75AA58C-2FE1-4478-7834-1F02D9768EE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C75AA58C-2FE1-4478-7834-1F02D9768EE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B552DEAF-1C57-675E-4BEB-82CEF5C5B3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B552DEAF-1C57-675E-4BEB-82CEF5C5B3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B552DEAF-1C57-675E-4BEB-82CEF5C5B3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B552DEAF-1C57-675E-4BEB-82CEF5C5B3C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E30B8CB-042E-5C1B-8B30-D9FC1B713207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E30B8CB-042E-5C1B-8B30-D9FC1B713207}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E30B8CB-042E-5C1B-8B30-D9FC1B713207}.Release|Any CPU.ActiveCfg = Release|Any CPU
