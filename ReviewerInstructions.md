@@ -46,8 +46,7 @@ Dear reviewer, here are some instructions to help you with the review process:
 - Database schema/initial data generated from C# models/migrations.
 - Services, CQRS handlers, and validations are tested in Calendar.Tests.
 - Controllers are not tested (thin, only handle HTTP).
-- For real projects, add integration/E2E tests with real DB (cloud/docker pipeline).
-- Tests should cover repositories and controllers.
+- For real projects, add integration/E2E tests with real DB (cloud/docker pipeline). They should cover repositories and controllers.
 - xUnit and NSubstitute are used for testing.
 - EmailService uses Debug.WriteLine instead of real email sending.
 - All NuGet packages are up-to-date and suitable for .NET 8.
